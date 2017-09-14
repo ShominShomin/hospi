@@ -1,0 +1,7 @@
+{% if messages %} {% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+    {{ message|safe }}
+</div>
+{% endfor %} {% if user.is_staff %}
+<a href="{% url 'admin_profile' %}">Буцах</a>
+{% endif %} {% endif %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %}
+<div id=center_staff>
+    <div class="user-info-panel">
+        <div class="user-info-body">
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Хэрэглэгчийн ID</th>
+                    <th>Овог</th>
+                    <th>Нэр</th>
+                    <th>РД</th>
+                    <th>Утасны дугаар</th>
+                </tr>
+                {% for profile in appointments.profiles.all %}
+                <tr>
+                    <td>{{ profile.user }} </td>
+                    <td>{{ profile.details.last_name }}</td>
+                    <td>{{ profile.details.first_name }}</td>
+                    <td>{{ profile.details.register_num }}</td>
+                    <td>{{ profile.details.phone_number }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

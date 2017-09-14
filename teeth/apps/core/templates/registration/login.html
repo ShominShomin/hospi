@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block title %}Login{% endblock %} {% block content %}
+<section class="container">
+    <section class="login-form">
+        <div class="panel panel-default">
+            <div class="panel-heading">Хэрэглэгч нэвтэрч орох</div>
+            <div class="panel-body">
+                {% if form.errors %}
+                <p style="color: red">Нууц үг болон нэвтрэх нэр зөрж байна.</p>
+                {% endif %}
+                <form method="post" action="" role="login">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" class="form-control input-lg" value="{{ next }}" />
+                    <input type="loginform" class="form-control input-lg" name="{{ form.username.name }}" id="id_{{ form.username.name }}" placeholder="НЭВТРЭХ КОД">
+                    <input type="password" class="form-control input-lg" name="{{ form.password.name }}" id="id_{{ form.password.name }}" placeholder="НУУЦ ҮГ">
+                    <button type="submit" name="go" class="btn btn-lg btn-info btn-block">Нэвтрэх</button>
+                    <div class="form-links">
+                        <span class="glyphicon glyphicon-user text-primary"></span> <a href="{% url 'signup' %}">Шинээр бүртгэл үүсгэх</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</section>
+{% endblock %}

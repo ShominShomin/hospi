@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block content %}{% autoescape off %}
+<section class="container">
+    <section class="login-form">
+        <div class="panel panel-default">
+            <div class="panel-heading">Хэрэглэгч бүртгүүлэх</div>
+            <div class="panel-body">
+                <form method="post" action="" role="registration">
+                    {% csrf_token %}
+                    <table class="table"> {% for field in form %}
+                        <tr>
+                            <td>{{ field.label_tag }}</td>
+                            <td>{{ field }}</td>
+                        </tr>
+                        <!--<input type="basic" class="form-control input-lg" name="{{ field.name }}" id="id_{{ field.name }}"> -->
+                         {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %} {% endfor %}</table>
+
+                    <button type="submit" name="go" class="btn btn-lg btn-info btn-block">Бүртгүүлэх</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</section>
+{% endautoescape %}{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %} {% block content %} {% autoescape off %}
+<div class="main-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="profile-nav">
+                    <div class="user-heading round">
+                        <center>
+                            <h1>{{ profile.user }}</h1></center>
+                    </div>
+                </div>
+                <div class="user-info-panel-heading">
+                    Хувийн мэдээлэл өөрчлөх
+                </div>
+                <div id="border-fix" class="well" align="center" style="    box-shadow: 0 0 2px 0 #d3cbb8;">
+                    {% if profile.details is None %}
+                    <a id="custom_button_off" href="{% url 'add_details' %}" class="btn btn-lg btn-info">Үндсэн мэдээлэл</a> {% else %}
+                    <a id="custom_button" href="{% url 'add_details' %}" class="btn btn-lg btn-info">Үндсэн мэдээлэл</a> {% endif %}
+                    <br> {% if profile.address is None %}
+                    <a id="custom_button_off" href="{% url 'add_address' %}" class="btn btn-lg btn-info">Хаяг, байршил</a> {% else %}
+                    <a id="custom_button" href="{% url 'add_address' %}" class="btn btn-lg btn-info">Хаяг, байршил</a> {% endif %}
+                    <br> {% if profile.occupation is None %}
+                    <a id="custom_button_off" href="{% url 'add_occupation' %}" class="btn btn-lg btn-info">Ажил, мэргэжил</a> {% else %}
+                    <a id="custom_button" href="{% url 'add_occupation' %}" class="btn btn-lg btn-info">Ажил, мэргэжил</a> {% endif %}
+                    <br> {% if profile.medical is None %}
+                    <a id="custom_button_off" href="{% url 'add_medical' %}" class="btn btn-lg btn-info">Эрүүл мэндийн байдал</a> {% else %}
+                    <a id="custom_button" href="{% url 'add_medical' %}" class="btn btn-lg btn-info">Эрүүл мэндийн байдал</a> {% endif %}
+                </div>
+            </div>
+            <div class="profile-info col-md-9">
+                <div class="user-info-panel">
+                    <div class="user-info-panel-heading">
+                        Ерөнхий мэдээлэл
+                    </div>
+                    <div class="user-info-body">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <td><b>Бүтэн нэр:</b></td>
+                                <td>{{ profile.details.last_name }} {{ profile.details.first_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Регистрийн дугаар:</b></td>
+                                <td>{{ profile.details.register_num }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Утасны дугаар:</b></td>
+                                <td> {{ profile.details.phone_number }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Аймаг/Хот:</b></td>
+                                <td>{{ profile.address.get_aimag_hot_display }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Баталгаажсан байдал:</b></td>
+                                <td>{{ profile.is_activeFirst }} {{ profile.is_activeSecond }} </td>
+                            </tr>
+                            <tr>
+                                <td><b>Хуваарь авсан байдал:</b></td>
+                                <td> {{ schedule }} </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="user-info-panel">
+                    <div class="user-info-panel-heading">
+                        Өдөр бүртгүүлэх
+                    </div>
+                    {% if profile.details is not None and profile.address is not None and profile.occupation is not None and profile.medical is not None %}
+                    {% if profile.is_activeFirst is True %}
+                    <div id="border-fix" class="well" align="top-center">
+                        <div class='row_apps'>
+                            {% for appointment in appointments %}
+                            <div class='btn_apps'>
+                                <b>{{ appointment.title }}</b>
+                                <br> {{ appointment.profiles.count }}/{{ appointment.allowed_amount }}
+                                <br>
+                                <a id="register_button" href="{% url 'register_appointment' pk=appointment.pk %}" onclick="return confirm('Та бүрэн итгэлтэй байна уу?')" class="btn btn-lg btn-info">Бүртгүүлэх</a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class='clear_apps'></div>
+                        <center>
+                            {% if appointments.has_other_pages %}
+                            <ul class="pagination">
+                                {% if appointments.has_previous %}
+                                <li><a href="?page={{ appointments.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&laquo;</span></li>
+                                {% endif %} {% for i in appointments.paginator.page_range %} {% if appointments.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span>
+                                </li>
+                                {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %} {% endfor %} {% if appointments.has_next %}
+                                <li><a href="?page={{ appointments.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&raquo;</span></li>
+                                {% endif %}
+                            </ul>
+                            {% endif %}
+                        </center>
+                    </div>
+                    {% else %}
+                    {% if time_check %}
+                    	<div id="border-fix" class="well" align="top-center">
+                    	<center>
+                    		<div class='warning_message'>Хэрэглэгчийн эрхээ баталгаажуулна уу.</div>
+                    		<a id="custom_button" href="{% url 'confirm_first_activation' %}" class="btn btn-lg btn-info">Баталгаажуулах</a>
+                    	</center>
+                    	</div>
+                    {% else %}
+                    	<div id="border-fix" class="well" align="top-center">
+                    	<center>
+                    		<div class='warning_message'>Хэрэглэгчийн эрхээ доорх өдрөөс хойш баталгаажуулна уу.<br>{{ time }}</div>
+                    	</center>
+                    	</div>
+                    {% endif %}
+                    {% endif %}
+                    {% else %}
+                    	<div id="border-fix" class="well" align="top-center">
+                    	<center>
+                    		<div class='warning_message'>Хувийн мэдээллээ бүрэн оруулна уу.</div>
+                    	</center>
+                    	</div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <script type="text/javascript">
+            function clicked() {
+                if (confirm('Do you want to submit?')) {
+                    yourformelement.submit();
+                } else {
+                    return false;
+                }
+            }
+            </script>
+            {% endautoescape %} {% endblock %}
